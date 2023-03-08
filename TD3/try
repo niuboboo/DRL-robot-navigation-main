@@ -1,0 +1,16 @@
+self.vel_pub = rospy.Publisher("/r1/cmd_vel", Twist, queue_size=1) # 创建一个发布者对象，用于向/r1/cmd_vel主题发送Twist类型的消息，控制机器人的速度
+    self.set_state = rospy.Publisher(
+        "gazebo/set_model_state", ModelState, queue_size=10
+    ) # 创建一个发布者对象，用于向gazebo/set_model_state主题发送ModelState类型的消息，设置模型的状态
+    self.unpause = rospy.ServiceProxy("/gazebo/unpause_physics", Empty) # 创建一个服务代理对象，用于调用/gazebo/unpause_physics服务，恢复物理仿真
+    self.pause = rospy.ServiceProxy("/gazebo/pause_physics", Empty) # 创建一个服务代理对象，用于调用/gazebo/pause_physics服务，暂停物理仿真
+    self.reset_proxy = rospy.ServiceProxy("/gazebo/reset_world", Empty) # 创建一个服务代理对象，用于调用/gazebo/reset_world服务，重置仿真世界
+    self.publisher = rospy.Publisher("goal_point", MarkerArray, queue_size=3) # 创建一个发布者对象，用于向goal_point主题发送MarkerArray类型的消息，显示目标点的位置和方向
+    self.publisher2 = rospy.Publisher("linear_velocity", MarkerArray, queue_size=1) # 创建一个发布者对象，用于向linear_velocity主题发送MarkerArray类型的消息，显示机器人的线速度
+    self.publisher3 = rospy.Publisher("angular_velocity", MarkerArray, queue_size=1) # 创建一个发布者对象，用于向angular_velocity主题发送MarkerArray类型的消息，显示机器人的角速度
+    self.velodyne = rospy.Subscriber(
+        "/velodyne_points", PointCloud2, self.velodyne_callback, queue_size=1
+    ) # 创建一个订阅者对象，用于接收/velodyne_points主题上的PointCloud2类型的消息，并调用self.velodyne_callback函数处理数据
+    self.odom = rospy.Subscriber(
+        "/r1/odom", Odometry, self.odom_callback, queue_size=1
+    ) # 创建一个订阅者对象，用于接收/r1/odom主题上的Odometry类型的消息，并调用self.odom_callback函数处理数据
